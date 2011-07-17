@@ -87,7 +87,7 @@
 /*
  * The preempt_count offset after preempt_disable();
  */
-#if defined(CONFIG_PREEMPT_COUNT)
+#if defined(CONFIG_PREEMPT_COUNT) && !defined(CONFIG_PREEMPT_RT_FULL)
 # define PREEMPT_DISABLE_OFFSET	PREEMPT_OFFSET
 #else
 # define PREEMPT_DISABLE_OFFSET	0
