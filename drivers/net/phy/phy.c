@@ -845,6 +845,7 @@ void phy_state_machine(struct work_struct *work)
 			phydev->state = PHY_NOLINK;
 			netif_carrier_off(phydev->attached_dev);
 			phydev->adjust_link(phydev->attached_dev);
+			phy_led_trigger_change_speed(phydev);
 			break;
 		}
 
@@ -858,6 +859,7 @@ void phy_state_machine(struct work_struct *work)
 			phydev->state = PHY_RUNNING;
 			netif_carrier_on(phydev->attached_dev);
 			phydev->adjust_link(phydev->attached_dev);
+			phy_led_trigger_change_speed(phydev);
 
 		} else if (0 == phydev->link_timeout--)
 			needs_aneg = true;
@@ -882,6 +884,7 @@ void phy_state_machine(struct work_struct *work)
 			phydev->state = PHY_RUNNING;
 			netif_carrier_on(phydev->attached_dev);
 			phydev->adjust_link(phydev->attached_dev);
+			phy_led_trigger_change_speed(phydev);
 		}
 		break;
 	case PHY_FORCING:
@@ -898,6 +901,7 @@ void phy_state_machine(struct work_struct *work)
 		}
 
 		phydev->adjust_link(phydev->attached_dev);
+		phy_led_trigger_change_speed(phydev);
 		break;
 	case PHY_RUNNING:
 		/* Only register a CHANGE if we are polling or ignoring
@@ -927,6 +931,7 @@ void phy_state_machine(struct work_struct *work)
 		}
 
 		phydev->adjust_link(phydev->attached_dev);
+		phy_led_trigger_change_speed(phydev);
 
 		if (phy_interrupt_is_valid(phydev))
 			err = phy_config_interrupt(phydev,
@@ -937,6 +942,7 @@ void phy_state_machine(struct work_struct *work)
 			phydev->link = 0;
 			netif_carrier_off(phydev->attached_dev);
 			phydev->adjust_link(phydev->attached_dev);
+			phy_led_trigger_change_speed(phydev);
 			do_suspend = true;
 		}
 		break;
@@ -961,6 +967,7 @@ void phy_state_machine(struct work_struct *work)
 					phydev->state = PHY_NOLINK;
 				}
 				phydev->adjust_link(phydev->attached_dev);
+				phy_led_trigger_change_speed(phydev);
 			} else {
 				phydev->state = PHY_AN;
 				phydev->link_timeout = PHY_AN_TIMEOUT;
@@ -977,6 +984,7 @@ void phy_state_machine(struct work_struct *work)
 				phydev->state = PHY_NOLINK;
 			}
 			phydev->adjust_link(phydev->attached_dev);
+			phy_led_trigger_change_speed(phydev);
 		}
 		break;
 	}
