@@ -19,6 +19,7 @@
 #include <linux/kernfs.h>
 
 #include <linux/cgroup-defs.h>
+#include <linux/work-simple.h>
 
 #ifdef CONFIG_CGROUPS
 
