@@ -3218,6 +3218,7 @@ static void e1000_configure_rx(struct e1000_adapter *adapter)
 	rctl = er32(RCTL);
 	if (!(adapter->flags2 & FLAG2_NO_DISABLE_RX))
 		ew32(RCTL, rctl & ~E1000_RCTL_EN);
+	E1000_WR_DELAY();
 	e1e_flush();
 	usleep_range(10000, 20000);
 
@@ -3255,6 +3256,7 @@ static void e1000_configure_rx(struct e1000_adapter *adapter)
 	ctrl_ext |= E1000_CTRL_EXT_IAME;
 	ew32(IAM, 0xffffffff);
 	ew32(CTRL_EXT, ctrl_ext);
+	E1000_WR_DELAY();
 	e1e_flush();
 
 	/* Setup the HW Rx Head and Tail Descriptor Pointers and
@@ -3407,9 +3409,7 @@ static int e1000e_write_uc_addr_list(struct net_device *netdev)
 		ew32(RAH(rar_entries), 0);
 		ew32(RAL(rar_entries), 0);
 	}
-#ifdef CONFIG_E1000_DELAY
-	E1000_WR_DELAY_RNG(rar_count);
-#endif
+	E1000_WR_DELAY();
 	e1e_flush();
 
 	return count;
@@ -3486,12 +3486,13 @@ static void e1000e_setup_rss_hash(struct e1000_adapter *adapter)
 	for (i = 0; i < 10; i++)
 		ew32(RSSRK(i), rss_key[i]);
 
+	E1000_WR_DELAY();
+
 	/* Direct all traffic to queue 0 */
 	for (i = 0; i < 32; i++)
 		ew32(RETA(i), 0);
-#ifdef CONFIG_E1000_DELAY
+
 	E1000_WR_DELAY();
-#endif
 
 	/* Disable raw packet checksumming so that RSS hash is placed in
 	 * descriptor on writeback.
