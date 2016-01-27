@@ -2367,6 +2367,7 @@ int macb_fpga_notifier(struct notifier_block *nb, unsigned long val, void *data)
 			if (netif_running(bp->dev)) {
 				macb_close(bp->dev);
 				phy_stop_interrupts(bp->phy_dev);
+				phy_stop_machine(bp->phy_dev);
 			}
 
 			bp->fpga_down = 1;
@@ -2387,6 +2388,7 @@ int macb_fpga_notifier(struct notifier_block *nb, unsigned long val, void *data)
 
 		/* If the interface has been opened. */
 		if (netif_running(bp->dev)) {
+			phy_start_machine(bp->phy_dev);
 			phy_start_interrupts(bp->phy_dev);
 			macb_open(bp->dev);
 		}
