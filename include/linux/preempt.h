@@ -64,6 +64,15 @@
 /* We use the MSB mostly because its available */
 #define PREEMPT_NEED_RESCHED	0x80000000
 
+/*
+ * The preempt_count offset after spin_lock()
+ */
+#if !defined(CONFIG_PREEMPT_RT_FULL)
+#define PREEMPT_LOCK_OFFSET    PREEMPT_DISABLE_OFFSET
+#else
+#define PREEMPT_LOCK_OFFSET    0
+#endif
+
 /* preempt_count() and related functions, depends on PREEMPT_NEED_RESCHED */
 #include <asm/preempt.h>
 
